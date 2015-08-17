@@ -47,7 +47,7 @@
   </ion-header-bar>
   <ion-content scroll="false">
     <ion-list>
-      <ion-item ng-repeat="task in activeProject.tasks"  ng-click="selectProject(project, $index)">
+      <ion-item class="icon ion-edit" ng-repeat="task in activeProject.tasks"  ng-click="editTask(task, $index)">
         {{task.title}}
       </ion-item>
     </ion-list>
@@ -108,6 +108,35 @@
 
 </script>
 
+
+<script id="edit-task.html" type="text/ng-template">
+  <div class="modal">
+
+    <!-- Modal header bar -->
+    <ion-header-bar class="bar-secondary">
+      <h1 class="title">Edit Task</h1>
+      <button class="button button-clear button-positive" ng-click="closeEditTask()">Cancel</button>
+    </ion-header-bar>
+    
+    <!-- Modal content area -->
+    <ion-content>
+      <form ng-submit="updateTask(taskIndex, task)">
+        <div class="list">
+          <label class="item item-input">
+            <input type="text" placeholder="What do you need to do?" ng-model="task.title">
+          </label>
+          <label class="item item-input" ng-click="openDatePicker()">
+                <span class="input-label">From date</span>
+                <input type="text" ng-model="task.datetime">
+          </label>
+        </div>
+        <div class="padding">
+          <button type="submit" class="button button-block button-positive">Update Task</button>
+        </div>
+      </form>
+    </ion-content>
+  </div>
+</script>
 
 </body>
 

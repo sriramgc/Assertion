@@ -76,6 +76,14 @@ angular.module('todo', ['ionic','ui.bootstrap.datetimepicker'])
   }, {
     scope: $scope
   });
+  
+  // Edit and load the Modal
+  $ionicModal.fromTemplateUrl('edit-task.html', function(modal) {
+    $scope.editTaskModal = modal;
+  }, {
+    scope: $scope,
+    animation: 'slide-in-up'
+  });
 
   $scope.createTask = function(task) {
     if(!$scope.activeProject || !task) {
@@ -83,7 +91,7 @@ angular.module('todo', ['ionic','ui.bootstrap.datetimepicker'])
     }
     $scope.activeProject.tasks.push({
       title: task.title,
-      dateime:task.datetime
+      datetime:task.datetime
     });
     $scope.taskModal.hide();
 
@@ -99,7 +107,30 @@ angular.module('todo', ['ionic','ui.bootstrap.datetimepicker'])
 
   $scope.closeNewTask = function() {
     $scope.taskModal.hide();
-  }
+  };
+  
+  // Open our new task modal
+  $scope.editTask = function(task, i) {
+    $scope.task = {title: task.title, datetime: task.datetime};
+    $scope.taskIndex = i;
+    $scope.editTaskModal.show();
+  };
+  
+  $scope.closeEditTask = function() {
+    $scope.editTaskModal.hide();
+  };
+  
+  // Called when the form is submitted
+  $scope.updateTask = function(i, task) {
+    if (!$scope.activeProject || !task) {
+      return;
+    }
+    $scope.activeProject.tasks[i] = task;
+    $scope.editTaskModal.hide();
+
+    // Inefficient, but save all the projects
+    Projects.save($scope.projects);
+  };
 
   $scope.toggleProjects = function() {
     $ionicSideMenuDelegate.toggleLeft();
@@ -112,9 +143,12 @@ angular.module('todo', ['ionic','ui.bootstrap.datetimepicker'])
   
   $scope.openDatePicker = function() {
     $scope.tmp = {};
-    $scope.task = {};
     
-   // $scope.task.datetime = new Date(2015,08,12);
+    if (typeof $scope.task == "undefined") {
+    // Works
+    $scope.task = {};
+    }
+    
     $scope.tmp.newDate = $scope.task.datetime;
     
     var birthDatePopup = $ionicPopup.show({
