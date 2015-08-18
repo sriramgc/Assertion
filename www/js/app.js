@@ -13,6 +13,8 @@ angular.module('todo', ['ionic','ui.bootstrap.datetimepicker'])
   return {
     all: function() {
       var projectString = window.localStorage['projects'];
+      if(projectString == "[object Object]")
+        projectString = undefined;
       if(projectString) {
         return angular.fromJson(projectString);
       }
@@ -135,10 +137,16 @@ angular.module('todo', ['ionic','ui.bootstrap.datetimepicker'])
   $scope.toggleProjects = function() {
     $ionicSideMenuDelegate.toggleLeft();
   };
+  $scope.cleanUp = function() {
+    $scope.task = {};
+window.localStorage['lastActiveProject'] = 0;
+window.localStorage['projects'] ={};
+  };
   
   $scope.$watch('task.datetime', function(unformattedDate){
     alert(unformattedDate);
     $scope.task.formattedBirthDate = $filter('date')(unformattedDate, 'dd/MM/yyyy HH:mm');
+    
   });
   
   $scope.openDatePicker = function() {
