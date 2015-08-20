@@ -93,11 +93,11 @@
       <form ng-submit="createTask(task)">
         <div class="list">
           <label class="item item-input">
-            <input type="text" placeholder="What do you need to do?" ng-model="task.title">
+            <input type="text"  ng-model="task.title">
           </label>
           <label class="item item-input" ng-click="openDatePicker()">
                 <span class="input-label">From date</span>
-                <input type="text" ng-model="task.datetime">
+                <input type="text" ng-model="task.formattedBirthDate">
           </label>
         </div>
         <div class="padding">

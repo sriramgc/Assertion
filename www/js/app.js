@@ -13,7 +13,7 @@ angular.module('todo', ['ionic','ui.bootstrap.datetimepicker'])
   return {
     all: function() {
       var projectString = window.localStorage['projects'];
-      if(projectString == "[object Object]")
+      if(projectString == "undefined")
         projectString = undefined;
       if(projectString) {
         return angular.fromJson(projectString);
@@ -76,7 +76,9 @@ angular.module('todo', ['ionic','ui.bootstrap.datetimepicker'])
   $ionicModal.fromTemplateUrl('new-task.html', function(modal) {
     $scope.taskModal = modal;
   }, {
-    scope: $scope
+    scope: $scope,
+    animation: 'slide-in-up',
+    focusFirstInput: true
   });
   
   // Edit and load the Modal
@@ -104,6 +106,7 @@ angular.module('todo', ['ionic','ui.bootstrap.datetimepicker'])
   };
 
   $scope.newTask = function() {
+    $scope.task ={tile : ""};
     $scope.taskModal.show();
   };
 
@@ -138,14 +141,15 @@ angular.module('todo', ['ionic','ui.bootstrap.datetimepicker'])
     $ionicSideMenuDelegate.toggleLeft();
   };
   $scope.cleanUp = function() {
-    $scope.task = {};
+    $scope.task = undefined;
 window.localStorage['lastActiveProject'] = 0;
-window.localStorage['projects'] ={};
+window.localStorage['projects'] =undefined;
   };
   
   $scope.$watch('task.datetime', function(unformattedDate){
-    alert(unformattedDate);
-    $scope.task.formattedBirthDate = $filter('date')(unformattedDate, 'dd/MM/yyyy HH:mm');
+   // alert(unformattedDate);
+   if(unformattedDate)
+      $scope.task.formattedBirthDate = $filter('date')(unformattedDate, 'dd/MM/yyyy HH:mm');
     
   });
   
@@ -154,10 +158,12 @@ window.localStorage['projects'] ={};
     
     if (typeof $scope.task == "undefined") {
     // Works
-    $scope.task = {};
+    $scope.task = {title:"title" };
+    $scope.task.datetime = new Date();
+    alert(this.task.title);
     }
     
-    $scope.tmp.newDate = $scope.task.datetime;
+   $scope.tmp.newDate = $scope.task.datetime;
     
     var birthDatePopup = $ionicPopup.show({
      template: '<datetimepicker ng-model="tmp.newDate"></datetimepicker>',
