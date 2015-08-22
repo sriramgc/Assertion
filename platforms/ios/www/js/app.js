@@ -3,13 +3,14 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('todo', ['ionic','ui.bootstrap.datetimepicker'])
+angular.module('todo', ['ionic','ui.bootstrap.datetimepicker','ngCordova.plugins.device','ngCordova'])
 /**
  * The Projects factory handles saving and loading projects
  * from local storage, and also lets us save and load the
  * last active project index.
  */
-.factory('Projects', function() {
+ 
+ .factory('Projects', function() {
   return {
     all: function() {
       var projectString = window.localStorage['projects'];
@@ -39,7 +40,31 @@ angular.module('todo', ['ionic','ui.bootstrap.datetimepicker'])
   }
 })
 
-.controller('TodoCtrl', function($scope, $timeout, $ionicModal, Projects, $ionicSideMenuDelegate,$filter,$ionicPopup) {
+.controller('TodoCtrl', function($scope, $timeout, $ionicModal, Projects, $ionicSideMenuDelegate,$filter,$ionicPopup,$ionicPlatform,$cordovaLocalNotification) {
+
+
+$scope.addNotify = function() {
+        var alarmTime = new Date();
+        alarmTime.setMinutes(alarmTime.getMinutes() + 1);
+        $cordovaLocalNotification.add({
+            id: "1234",
+            date: alarmTime,
+            message: "This is a message",
+            title: "This is a title",
+            autoCancel: true,
+            sound: null
+        }).then(function () {
+            console.log("The notification has been set");
+        });
+    };
+ 
+    $scope.isScheduled = function() {
+        $cordovaLocalNotification.isScheduled("1234").then(function(isScheduled) {
+            alert("Notification 1234 Scheduled: " + isScheduled);
+        });
+    }
+    
+   
 
   // A utility function for creating a new project
   // with the given projectTitle
@@ -103,10 +128,12 @@ angular.module('todo', ['ionic','ui.bootstrap.datetimepicker'])
     Projects.save($scope.projects);
 
     task.title = "";
+    
   };
-
+  
+  
   $scope.newTask = function() {
-    $scope.task ={tile : ""};
+    $scope.task ={tile : "",datetime : new Date()};
     $scope.taskModal.show();
   };
 
