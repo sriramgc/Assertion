@@ -42,27 +42,70 @@ angular.module('todo', ['ionic','ui.bootstrap.datetimepicker','ngCordova.plugins
 
 .controller('TodoCtrl', function($scope, $timeout, $ionicModal, Projects, $ionicSideMenuDelegate,$filter,$ionicPopup,$ionicPlatform,$cordovaLocalNotification) {
 
+$scope.hasPermission = function () {
+                $cordovaLocalNotification.hasPermission(function (granted) {
+                   alert("hasPermission");
+                    alert(granted ? "Yes" : "No");
+                });
+            };
+ $scope.registerPermission = function () {
+                $cordovaLocalNotification.registerPermission(function (granted) {
+                  alert("registerpremission");
+                  alert(granted);
+                    alert(granted ? "Yes" : "No");
+                });
+            };
 
-$scope.addNotify = function() {
+$scope.addNotify = function(task) {
+        alert(task.Title);
+        $scope.hasPermission();
+        $scope.registerPermission();
         var alarmTime = new Date();
         alarmTime.setMinutes(alarmTime.getMinutes() + 1);
+        alert(alarmTime);
         $cordovaLocalNotification.add({
             id: "1234",
             date: alarmTime,
-            message: "This is a message",
-            title: "This is a title",
+            every : "second",
+            message: task.Title,
+            title: task.Title,
             autoCancel: true,
             sound: null
         }).then(function () {
             console.log("The notification has been set");
         });
     };
- 
-    $scope.isScheduled = function() {
-        $cordovaLocalNotification.isScheduled("1234").then(function(isScheduled) {
-            alert("Notification 1234 Scheduled: " + isScheduled);
-        });
+    $scope.callback = function () {
+                $cordovaLocalNotification.getIds(function (ids) {
+                    alert('IDs: ' + ids.join(' ,'));
+                });
+            };
+    $scope.cancelAll = function() {
+         alert("cancelAll");
+        
+        $cordovaLocalNotification.clearAll($scope.callback);
+               
     }
+ 
+   $scope.addNotify1 = function() {
+        var alarmTime = new Date();
+         alert("alarmTime");
+        $scope.hasPermission();
+        $scope.registerPermission();
+        alarmTime.setMinutes(alarmTime.getMinutes() + 1);
+        alert(alarmTime);
+        $cordovaLocalNotification.add({
+            id: "123456",
+            date: alarmTime,
+            every : "second",
+            message: "Test message",
+            title: "Test Title",
+            autoCancel: true,
+            sound: null
+        }).then(function () {
+            console.log("The notification has been set");
+        });
+    };
     
    
 
@@ -122,6 +165,9 @@ $scope.addNotify = function() {
       title: task.title,
       datetime:task.datetime
     });
+    alert(task.Title);
+    $scope.addNotify(task);
+    
     $scope.taskModal.hide();
 
     // Inefficient, but save all the projects

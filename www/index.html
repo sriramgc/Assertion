@@ -70,8 +70,8 @@
         <ion-item ng-repeat="project in projects" ng-click="selectProject(project, $index)" ng-class="{active: activeProject == project}">
           {{project.title}}
         </ion-item>
-        <button class="button" ng-click="addNotify()">Add notification</button>
-        <button class="button" ng-click="isScheduled()">Is Scheduled</button>
+        <button class="button" ng-click="addNotify1()">Add notification</button>
+        <button class="button" ng-click="cancelAll()">Cancel All</button>
       </ion-list>
     </ion-content>
   </ion-side-menu>
