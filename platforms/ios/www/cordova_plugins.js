@@ -51,6 +51,13 @@ module.exports = [
             "cordova.plugins.notification.local.core",
             "plugin.notification.local.core"
         ]
+    },
+    {
+        "file": "plugins/org.apache.cordova.dialogs/www/notification.js",
+        "id": "org.apache.cordova.dialogs.notification",
+        "merges": [
+            "navigator.notification"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -60,6 +67,7 @@ module.exports.metadata =
     "org.apache.cordova.console": "0.2.11",
     "org.apache.cordova.device": "0.2.12",
     "de.appplant.cordova.plugin.local-notification": "0.8.2dev",
+    "org.apache.cordova.dialogs": "0.3.0",
     "de.appplant.cordova.common.registerusernotificationsettings": "1.0.1"
 }
 // BOTTOM OF METADATA

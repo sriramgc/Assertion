@@ -64,7 +64,7 @@ $scope.addNotify = function(task) {
         alarmTime.setMinutes(alarmTime.getMinutes() + 1);
         alert(alarmTime);
         $cordovaLocalNotification.add({
-            id: "1234",
+            id: 1234,
             date: alarmTime,
             every : "second",
             message: task.Title,
@@ -76,16 +76,25 @@ $scope.addNotify = function(task) {
         });
     };
     $scope.callback = function () {
+      alert("callback");
                 $cordovaLocalNotification.getIds(function (ids) {
                     alert('IDs: ' + ids.join(' ,'));
                 });
             };
-    $scope.cancelAll = function() {
-         alert("cancelAll");
-        
-        $cordovaLocalNotification.clearAll($scope.callback);
-               
-    }
+    
+     $scope.cancelNotification = function () {
+    $cordovaLocalNotification.cancel('123456').then(function () {
+      alert('callback for cancellation background notification');
+    });
+  };
+
+  $scope.cancelAllNotification = function () {
+    $cordovaLocalNotification.cancelAll().then(function () {
+      alert('callback for canceling all background notifications');
+    });
+  };
+    
+    
  
    $scope.addNotify1 = function() {
         var alarmTime = new Date();
@@ -95,7 +104,7 @@ $scope.addNotify = function(task) {
         alarmTime.setMinutes(alarmTime.getMinutes() + 1);
         alert(alarmTime);
         $cordovaLocalNotification.add({
-            id: "123456",
+            id: 123456,
             date: alarmTime,
             every : "second",
             message: "Test message",
