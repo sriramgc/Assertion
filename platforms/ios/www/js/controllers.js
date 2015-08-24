@@ -1,4 +1,4 @@
-angular.module('todo.controllers', ['todo.services'])
+angular.module('todo.controllers', [])
 
 .controller('todoCtrl', function($scope, $timeout, $ionicModal, Projects, $ionicSideMenuDelegate,$filter,$ionicPopup,$ionicPlatform,$cordovaLocalNotification) {
 
