@@ -116,7 +116,23 @@ $scope.addNotify = function(task) {
         });
     };
     
-   
+    // A confirm dialog
+    $scope.showConfirm = function(onYes, onNo) {
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Delete Task',
+      template: 'Are you sure you want to delete this task?'
+    });
+    confirmPopup.then(function(res) {
+      if(res) {
+  
+        onYes();
+      } else {
+  
+        if (onNo)
+          onNo();
+      }
+    });
+    };
 
   // A utility function for creating a new project
   // with the given projectTitle
@@ -195,6 +211,19 @@ $scope.addNotify = function(task) {
   $scope.closeNewTask = function() {
     $scope.taskModal.hide();
   };
+  
+  // delete selected task
+  $scope.deleteTask = function(i, task) {
+    if (!$scope.activeProject || !task ) {
+      return;
+    }
+    console.log("start deleting");
+    $scope.showConfirm(function() {
+      console.log("confirmed to delete task "+i);
+      $scope.activeProject.tasks.splice(i,1);
+      Projects.save($scope.projects);
+    });
+  }
   
   // Open our new task modal
   $scope.editTask = function(task, i) {
